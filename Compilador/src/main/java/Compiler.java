@@ -8,58 +8,100 @@ public class Compiler {
     static final List<Character> ALPHABET = Arrays.asList('*','+','-','/','%','=','>','<','!','|','&');
 
     static final String[][]  RULES = {
-            {"1F"," "," "," "," "," "," "," "," "," "," "},
-            {" ","1F"," "," "," "," "," "," "," "," "," "},
-            {" "," ","1F"," "," "," "," "," "," "," "," "},
-            {" "," "," ","1F"," "," "," "," "," "," "," "},
-            {" "," "," "," ","1F"," "," "," "," "," "," "},
-            {" "," "," "," "," ","1F"," "," "," "," "," "},
-            {" "," "," ",""," "," ","1F"," "," "," "," "},
-            {" "," "," ",""," "," "," ","1F"," "," "," "},
-            {" "," "," ",""," "," "," "," ","1F"," "," "},
-            {" "," "," ",""," "," "," "," "," ","1F"," "},
-            {" "," "," ",""," "," "," "," "," "," ","1-2F"},
-            {" "," "," ",""," "," "," "," "," ","1-2F"," "},
-            {" ","1-2F"," ",""," "," "," "," "," "," "," "},
-            {" "," ","1-2F",""," "," "," "," "," "," "," "},
-            {" "," "," ",""," ","1-2F"," "," "," "," "," "},
-            {" "," "," "," ","1","F"," "," "," "," "," "},
-            {" "," ","1"," "," ","F"," "," "," "," "," "},
-            {" ","1"," "," "," ","F"," "," "," "," "," "},
-            {"1"," "," "," "," ","F"," "," "," "," "," "},
-            {" "," "," ","1"," ","F"," "," "," "," "," "},
+            {"0F"," "," "," "," "," "," "," "," "," "," "},
+            {" ","0F"," "," "," "," "," "," "," "," "," "},
+            {" "," ","0F"," "," "," "," "," "," "," "," "},
+            {" "," "," ","0F"," "," "," "," "," "," "," "},
+            {" "," "," "," ","0F"," "," "," "," "," "," "},
+            {" "," "," "," "," ","0F"," "," "," "," "," "},
+            {" "," "," ",""," "," ","0F"," "," "," "," "},
+            {" "," "," ",""," "," "," ","0F"," "," "," "},
+            {" "," "," ",""," "," "," "," ","0F"," "," "},
+            {" "," "," ",""," "," "," "," "," ","0F"," "},
+            {" "," "," ",""," "," "," "," "," "," ","0-1F"},
+            {" "," "," ",""," "," "," "," "," ","0-1F"," "},
+            {" ","0-1F"," ",""," "," "," "," "," "," "," "},
+            {" "," ","0-1F",""," "," "," "," "," "," "," "},
+            {" "," "," ",""," ","0-1F"," "," "," "," "," "},
+            {" "," "," "," ","0","1F"," "," "," "," "," "},
+            {" "," ","0"," "," ","1F"," "," "," "," "," "},
+            {" ","0"," "," "," ","1F"," "," "," "," "," "},
+            {"0"," "," "," "," ","1F"," "," "," "," "," "},
+            {" "," "," ","0"," ","1F"," "," "," "," "," "},
+            {"0","1"," ","2F"," "," "," "," "," "," "," "},
     };
+
+    static Integer index = 1;
+    static String input;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Digite um texto: ");
-        String input = scanner.nextLine();
-        scanner.close();
-        List<Integer> positions = getPositions(input.charAt(0));
-        for(int indexPos = 0; indexPos < positions.size(); indexPos++){
-            for (int indexRule = 0; indexRule < RULES[positions.get(indexPos)].length; indexRule++){
-                for(int indexInput = 0; indexInput < input.length(); indexInput ++){
-
-                }
+        while (true) {
+            System.out.print("Digite uma palavra: ");
+            input = scanner.nextLine();
+            if (getPositions(input.charAt(0))) {
+                System.out.println("Sucesso");
+            } else {
+                System.out.println("Falha");
             }
         }
     }
 
-    public static List<Integer> getPositions(char initial){
-        int initialPosInAlpha = 0;
+    public static boolean getPositions(char initial){
+        Integer initialPosInAlpha = null;
         List<Integer> posInRules = new ArrayList<>();
         for(int i = 0; i < ALPHABET.size(); i++){
             if(initial == ALPHABET.get(i)){
                 initialPosInAlpha = i;
             }
         }
+        if(initialPosInAlpha == null){
+            return false;
+        }
         for(int i = 0; i < RULES.length; i++){
-            String s = RULES[i][initialPosInAlpha];
-            String[] split = s.split("-");
-            if(split[0].equals("1") || split[0].equals("1F")){
+            String rules = RULES[i][initialPosInAlpha];
+
+            if(input.length() != index){
+                if(rules.contains("0")){
+                    posInRules.add(i);
+                }
+            }
+            else {
+                if(rules.contains("0F")){
+                    return true;
+                }
+            }
+        }
+
+        return validateChars(posInRules, input.charAt(index), input.length());
+    }
+
+    public static boolean validateChars(List<Integer> receivedPos, char character, int wordLenght){
+        int initialPosInAlpha = 0;
+        List<Integer> posInRules = new ArrayList<>();
+        for(int i = 0; i < ALPHABET.size(); i++){
+            if(character == ALPHABET.get(i)){
+                initialPosInAlpha = i;
+            }
+        }
+        for(int i = 0; i < receivedPos.size(); i++){
+            String rules = RULES[receivedPos.get(i)][initialPosInAlpha];
+            if(rules.contains(index.toString()) || rules.contains(index.toString().concat("F"))){
                 posInRules.add(i);
             }
         }
-        return posInRules;
+
+        boolean expected;
+
+        if(index+1 != wordLenght && posInRules.size() != 0){
+            index++;
+            expected = validateChars(posInRules, input.charAt(index), wordLenght);
+        }
+
+        else {
+            expected = posInRules.size() != 0;
+        }
+
+        return expected;
     }
 }
