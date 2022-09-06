@@ -51,7 +51,6 @@ public class Compiler {
             {" "," "," "," "," "," "," "," "," "," "," "," "," ","4"," "," "," "," ","5F","2"," "," "," "," "," ","0","3"," "," ","1"," "},
             {" "," "," "," "," "," "," "," "," "," "," "," "," "," ","3F"," "," "," "," ","2"," "," "," ","1"," "," "," "," ","0"," "," "},
             {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," ","4F"," "," ","1","2"," ","3"," "," "," "," "," "," "," ","0"," "}
-
     };
 
     static Integer index = 1;
@@ -64,6 +63,11 @@ public class Compiler {
             index = 1;
             System.out.print("Digite uma palavra: ");
             input = scanner.nextLine();
+            while (input.equals("")){
+                System.out.println("Por favor, digite uma palavra válida");
+                System.out.print("Digite uma palavra: ");
+                input = scanner.nextLine();
+            }
 
             if(input.equalsIgnoreCase("sair")) {
                 break;
@@ -75,6 +79,7 @@ public class Compiler {
                 System.out.println("Palavra inválida");
             }
         }
+        scanner.close();
     }
 
     public static boolean getPositions(char initial) {
@@ -84,6 +89,7 @@ public class Compiler {
         for(int i = 0; i < ALPHABET.size(); i++) {
             if(initial == ALPHABET.get(i)) {
                 initialPosInAlpha = i;
+                break;
             }
         }
 
@@ -119,6 +125,7 @@ public class Compiler {
         for(int i = 0; i < ALPHABET.size(); i++){
             if(character == ALPHABET.get(i)){
                 initialPosInAlpha = i;
+                break;
             }
         }
 
