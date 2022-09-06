@@ -19,7 +19,7 @@ public class Compiler {
             {" "," "," ",""," "," "," "," ","0F"," "," "},
             {" "," "," ",""," "," "," "," "," ","0F"," "},
             {" "," "," ",""," "," "," "," "," "," ","0-1F"},
-            {" "," "," ",""," "," "," "," "," ","0-1F"," "},
+            {" "," "," "," "," "," "," "," "," ","0-1F"," "},
             {" ","0-1F"," ",""," "," "," "," "," "," "," "},
             {" "," ","0-1F",""," "," "," "," "," "," "," "},
             {" "," "," ",""," ","0-1F"," "," "," "," "," "},
@@ -28,7 +28,6 @@ public class Compiler {
             {" ","0"," "," "," ","1F"," "," "," "," "," "},
             {"0"," "," "," "," ","1F"," "," "," "," "," "},
             {" "," "," ","0"," ","1F"," "," "," "," "," "},
-            {"0","1"," ","2F"," "," "," "," "," "," "," "},
     };
 
     static Integer index = 1;
@@ -47,27 +46,30 @@ public class Compiler {
         }
     }
 
-    public static boolean getPositions(char initial){
+    public static boolean getPositions(char initial) {
         Integer initialPosInAlpha = null;
         List<Integer> posInRules = new ArrayList<>();
-        for(int i = 0; i < ALPHABET.size(); i++){
-            if(initial == ALPHABET.get(i)){
+
+        for(int i = 0; i < ALPHABET.size(); i++) {
+            if(initial == ALPHABET.get(i)) {
                 initialPosInAlpha = i;
             }
         }
-        if(initialPosInAlpha == null){
+
+        if(initialPosInAlpha == null) {
             return false;
         }
-        for(int i = 0; i < RULES.length; i++){
+
+        for(int i = 0; i < RULES.length; i++) {
             String rules = RULES[i][initialPosInAlpha];
 
-            if(input.length() != index){
-                if(rules.contains("0")){
+            if(input.length() != index) {
+                if(rules.contains("0")) {
                     posInRules.add(i);
                 }
             }
             else {
-                if(rules.contains("0F")){
+                if(rules.contains("0F")) {
                     return true;
                 }
             }
@@ -76,29 +78,31 @@ public class Compiler {
         return validateChars(posInRules, input.charAt(index), input.length());
     }
 
-    public static boolean validateChars(List<Integer> receivedPos, char character, int wordLenght){
-        int initialPosInAlpha = 0;
+    public static boolean validateChars(List<Integer> receivedPos, char character, int wordLenght) {
+        Integer initialPosInAlpha = null;
         List<Integer> posInRules = new ArrayList<>();
         for(int i = 0; i < ALPHABET.size(); i++){
             if(character == ALPHABET.get(i)){
                 initialPosInAlpha = i;
             }
         }
-        for(int i = 0; i < receivedPos.size(); i++){
+
+        if(initialPosInAlpha == null) {
+            return false;
+        }
+
+        for(int i = 0; i < receivedPos.size(); i++) {
             String rules = RULES[receivedPos.get(i)][initialPosInAlpha];
-            if(rules.contains(index.toString()) || rules.contains(index.toString().concat("F"))){
-                posInRules.add(i);
+            if(rules.contains(index.toString()) || rules.contains(index.toString().concat("F"))) {
+                posInRules.add(receivedPos.get(i));
             }
         }
 
         boolean expected;
-
-        if(index+1 != wordLenght && posInRules.size() != 0){
+        if(index+1 != wordLenght && posInRules.size() != 0) {
             index++;
             expected = validateChars(posInRules, input.charAt(index), wordLenght);
-        }
-
-        else {
+        } else {
             expected = posInRules.size() != 0;
         }
 
