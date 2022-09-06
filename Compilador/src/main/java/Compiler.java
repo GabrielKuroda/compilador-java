@@ -37,7 +37,21 @@ public class Compiler {
             {" "," "," "," "," "," "," "," "," "," "," ","2"," ","0"," "," "," "," ","1"," "," "," "," "," ","3F"," "," "," "," "," "," "},
             {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," ","0"," "," ","1"," "," "," ","2F"," "," "," "," "},
             {" "," "," "," "," "," "," "," "," "," "," ","3"," "," "," "," ","0"," "," "," "," ","1"," ","2"," "," ","4F"," "," "," "," "},
-            {" "," "," "," "," "," "," "," "," "," "," "," ","3"," ","0","5F"," ",""," "," "," ","4"," ","1"," "," "," ","2"," "," "," "}
+            {" "," "," "," "," "," "," "," "," "," "," "," ","3"," ","0","5F"," ",""," "," "," ","4"," ","1"," "," "," ","2"," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," ","3","0"," "," ","2"," "," "," "," ","4F"," "," "," ","1"," "," "," "," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," ","1"," ","0"," ","3F"," "," "," "," "," "," "," "," "," ","2"," "," "," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," ","0"," "," "," "," "," "," "," "," ","2","1"," ","3","4F"," "," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," ","0"," ","7F"," "," "," ","4"," "," ","2-5","1"," "," ","3","6"," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," ","0"," "," "," "," "," ","1-3F"," "," ","2"," "," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," ","3F"," "," "," ","0","2","1"," "," "," "," "," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," ","1"," "," "," "," "," "," ","5F"," ","0-4"," ","2","3"," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," ","3","5F"," "," ","1"," "," "," ","4"," ","0"," "," "," "," ","2"},
+            {" "," "," "," "," "," "," "," "," "," "," ","2"," ","5F"," "," "," "," "," ","4"," "," "," "," "," ","0","1-3"," "," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," ","4"," "," "," "," "," "," "," "," "," "," ","2","0","1-5F","3"," "," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," ","4"," "," "," "," ","5F","2"," "," "," "," "," ","0","3"," "," ","1"," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," "," ","3F"," "," "," "," ","2"," "," "," ","1"," "," "," "," ","0"," "," "},
+            {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," ","4F"," "," ","1","2"," ","3"," "," "," "," "," "," "," ","0"," "}
+
     };
 
     static Integer index = 1;
@@ -45,14 +59,20 @@ public class Compiler {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Digite 'sair' para sair");
         while (true) {
             index = 1;
             System.out.print("Digite uma palavra: ");
             input = scanner.nextLine();
+
+            if(input.equalsIgnoreCase("sair")) {
+                break;
+            }
+
             if (getPositions(input.charAt(0))) {
-                System.out.println("Sucesso");
+                System.out.println("Palavra válida");
             } else {
-                System.out.println("Falha");
+                System.out.println("Palavra inválida");
             }
         }
     }
@@ -93,7 +113,7 @@ public class Compiler {
         return validateChars(posInRules, input.charAt(index), input.length());
     }
 
-    public static boolean validateChars(List<Integer> receivedPos, char character, int wordLenght) {
+    public static boolean validateChars(List<Integer> receivedPos, char character, int wordLength) {
         Integer initialPosInAlpha = null;
         List<Integer> posInRules = new ArrayList<>();
         for(int i = 0; i < ALPHABET.size(); i++){
@@ -125,9 +145,9 @@ public class Compiler {
         }
 
         boolean expected = false;
-        if(index+1 != wordLenght) {
+        if(index+1 != wordLength) {
             index++;
-            expected = validateChars(posInRules, input.charAt(index), wordLenght);
+            expected = validateChars(posInRules, input.charAt(index), wordLength);
         }
 
         return expected;
